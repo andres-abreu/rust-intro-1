@@ -3,6 +3,16 @@ fn main() {
     let key = arguments.next().unwrap();
     let value = arguments.next().unwrap();
     println!("The key is '{}' and the value is '{}'", key, value);
+    let contents = format!("{}\t{}\n", key, value);
+    std::fs::write("kv.db", contents).unwrap();
 
+    let database = Database::new();
 }
 
+struct Database {}
+
+impl Database {
+    fn new() -> Database {
+        Database {}
+    }
+}
