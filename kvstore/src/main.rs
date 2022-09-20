@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 fn main() {
     let mut arguments = std::env::args().skip(1);
     let key = arguments.next().unwrap();
@@ -9,7 +11,9 @@ fn main() {
     let database = Database::new();
 }
 
-struct Database {}
+struct Database {
+    map: HashMap<String, String>,
+}
 
 impl Database {
     fn new() -> Database {
