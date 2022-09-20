@@ -8,7 +8,7 @@ fn main() {
     let contents = format!("{}\t{}\n", key, value);
     std::fs::write("kv.db", contents).unwrap();
 
-    let database = Database::new();
+    let database = Database::new().expect("Database::new() crashed");
 }
 
 struct Database {
@@ -16,9 +16,25 @@ struct Database {
 }
 
 impl Database {
-    fn new() -> Database {
-        Database {
-            map: HashMap::new(),
+    fn new() -> Result<Database, std::io::Error> {
+        // read the kv.db file
+
+        // let contents = match std::fs::read_to_string("kv.db") {
+        //     Ok(c) => c,
+        //     Err(error) => {
+        //        return Err(error); 
+        //     }
+        // };
+        let map = HashMap::new();
+        let contents = std::fs::read_to_string("kv.db")?;
+        for line in contents.lines() {
+            let mut chunks = line.splitn(2, '\t');
+            let key = chunks.next().expect("No key!");
+            let value = chunks.next().expect("No Value!");
+            map.insert(key, value);
         }
+        // parse the string
+        // populate our map
+        Ok(Database { map: map })
     }
 }
