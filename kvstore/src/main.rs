@@ -17,6 +17,8 @@ struct Database {
 
 impl Database {
     fn new() -> Database {
-        Database {}
+        Database {
+            map: HashMap::new(),
+        }
     }
 }
