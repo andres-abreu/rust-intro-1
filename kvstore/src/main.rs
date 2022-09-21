@@ -17,15 +17,7 @@ struct Database {
 
 impl Database {
     fn new() -> Result<Database, std::io::Error> {
-        // read the kv.db file
-
-        // let contents = match std::fs::read_to_string("kv.db") {
-        //     Ok(c) => c,
-        //     Err(error) => {
-        //        return Err(error); 
-        //     }
-        // };
-        let map = HashMap::new();
+        let mut map = HashMap::new();
         let contents = std::fs::read_to_string("kv.db")?;
         for line in contents.lines() {
             let mut chunks = line.splitn(2, '\t');
@@ -33,8 +25,6 @@ impl Database {
             let value = chunks.next().expect("No Value!");
             map.insert(key.to_owned(), value.to_owned());
         }
-        // parse the string
-        // populate our map
         Ok(Database { map: map })
     }
 }
