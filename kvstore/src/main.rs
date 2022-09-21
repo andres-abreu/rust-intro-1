@@ -8,7 +8,7 @@ fn main() {
     let contents = format!("{}\t{}\n", key, value);
     std::fs::write("kv.db", contents).unwrap();
 
-    let database = Database::new().expect("Database::new() crashed");
+    let database = Database::new().expect("Creating db failed");
 }
 
 struct Database {
