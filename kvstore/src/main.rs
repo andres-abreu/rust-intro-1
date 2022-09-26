@@ -27,8 +27,8 @@ impl Database {
         Ok(Database { map: map })
     }
 
-    fn insert(self, key: String, value: String) {
-        self.map.insert(key, value)
+    fn insert(mut self, key: String, value: String) {
+        self.map.insert(key, value);
     }
 
 }
