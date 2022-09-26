@@ -5,10 +5,9 @@ fn main() {
     let key = arguments.next().unwrap();
     let value = arguments.next().unwrap();
     println!("The key is '{}' and the value is '{}'", key, value);
-    let contents = format!("{}\t{}\n", key, value);
-    std::fs::write("kv.db", contents).unwrap();
 
     let database = Database::new().expect("Creating db failed");
+    database.insert(key, value);
 }
 
 struct Database {
@@ -27,4 +26,9 @@ impl Database {
         }
         Ok(Database { map: map })
     }
+
+    fn insert(self, key: String, value: String) {
+        self.map.insert(key, value)
+    }
+
 }
