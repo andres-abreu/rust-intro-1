@@ -2,18 +2,22 @@ use std::collections::HashMap;
 
 fn main() {
     let mut arguments = std::env::args().skip(1);
-    let key = arguments.next().unwrap();
+    let key = arguments.next().expect("Key was not there");
     let value = arguments.next().unwrap();
     println!("The key is '{}' and the value is '{}'", key, value);
 
     let mut database = Database::new().expect("Creating db failed");
     database.insert(key.to_uppercase(), value.clone());
     database.insert(key, value);
-    println!("The value was {}", value);
+    match database.flush() {
+        ok(()) => print!("Yay!"),
+        Err(err) => print!("Oh No's! Error! {}", err),
+    }
 }
 
 struct Database {
     map: HashMap<String, String>,
+    flush: bool,
 }
 
 impl Database {
@@ -26,10 +30,34 @@ impl Database {
             let value = chunks.next().expect("No Value!");
             map.insert(key.to_owned(), value.to_owned());
         }
-        Ok(Database { map: map })
+        Ok(Database { map, flush: false })
     }
 
-    fn insert(mut self, key: String, value: String) {
+    fn insert(&mut self, key: String, value: String) {
         self.map.insert(key, value);
     }
+
+    fn flush(&self) -> std::io::Result<()> {
+        do_flush(&self)
+    }
+}
+
+impl Drop for Database {
+    fn drop(&mut self) {
+        if !self.flush {
+            let_ = do_flush(self);
+        }
+    }
+}
+
+fn do_flush(&Database) -> std::io:Result<()> {
+    print!("Do flush called");
+    let mut conetents = String::new();
+    for (key, value) in &database.map {
+        contents.push_str(key);
+        contents.push('\t');
+        contents.push_str(&&&&value);
+        contents.push('\n');
+    }
+    std::fs::write("kv.db", contents)
 }
