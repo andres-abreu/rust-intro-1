@@ -6,8 +6,10 @@ fn main() {
     let value = arguments.next().unwrap();
     println!("The key is '{}' and the value is '{}'", key, value);
 
-    let database = Database::new().expect("Creating db failed");
+    let mut database = Database::new().expect("Creating db failed");
+    database.insert(key.to_uppercase(), value.clone());
     database.insert(key, value);
+    println!("The value was {}", value);
 }
 
 struct Database {
@@ -30,5 +32,4 @@ impl Database {
     fn insert(mut self, key: String, value: String) {
         self.map.insert(key, value);
     }
-
 }
