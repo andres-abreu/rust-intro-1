@@ -10,7 +10,7 @@ fn main() {
     database.insert(key.to_uppercase(), value.clone());
     database.insert(key, value);
     match database.flush() {
-        ok(()) => print!("Yay!"),
+        Ok(()) => println!("Yay!"),
         Err(err) => print!("Oh No's! Error! {}", err),
     }
 }
@@ -45,14 +45,14 @@ impl Database {
 impl Drop for Database {
     fn drop(&mut self) {
         if !self.flush {
-            let_ = do_flush(self);
+            let _ = do_flush(self);
         }
     }
 }
 
-fn do_flush(&Database) -> std::io:Result<()> {
+fn do_flush(database: &Database) -> std::io::Result<()> {
     print!("Do flush called");
-    let mut conetents = String::new();
+    let mut contents = String::new();
     for (key, value) in &database.map {
         contents.push_str(key);
         contents.push('\t');
